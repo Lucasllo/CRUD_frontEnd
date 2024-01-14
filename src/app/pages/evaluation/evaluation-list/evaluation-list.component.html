@@ -17,6 +17,7 @@
             <th scope="col"># User</th>
             <th scope="col"># Curso</th>
             <th scope="col">Conceito</th>
+            <th scope="col">Ação</th>
           </tr>
         </thead>
         <tbody>
@@ -26,7 +27,7 @@
             <td>{{evaluation.course_id}}</td>
             <td>{{evaluation.concept}}</td>
             <td>
-              <a class="btn btn-outline-primary" routerLink="/addEvaluation?id={{evaluation.id}}">
+              <a class="btn btn-outline-primary" routerLink="/addEvaluation" [queryParams]="{id: evaluation.id}">
                 <fa-icon [icon]="faPencil"></fa-icon>
               </a>
               <button type="button" class="btn btn-outline-danger" data-toggle="confirmation" data-placement="right"

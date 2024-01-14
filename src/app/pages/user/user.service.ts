@@ -49,11 +49,7 @@ export class UserService {
   }
 
   public async put<T>(options: GetOptions): Promise<T> {
-    let config = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
+    let config = {};
     try {
       let axiosResponse = await this.axiosClient.put<T>(
         options.url,

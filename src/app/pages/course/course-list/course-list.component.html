@@ -14,14 +14,15 @@
           <tr>
             <th scope="col">#</th>
             <th scope="col">Nome</th>
+            <th scope="col">Ação</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let course of courses">
             <th scope="row">{{course.id}}</th>
-            <td>{{course.name}}</td>
+            <td>{{course.nome}}</td>
             <td>
-              <a class="btn btn-outline-primary" routerLink="/addCourse?id={{course.id}}">
+              <a class="btn btn-outline-primary" routerLink="/addCourse" [queryParams]="{id: course.id}">
                 <fa-icon [icon]="faPencil"></fa-icon>
               </a>
               <button type="button" class="btn btn-outline-danger" data-toggle="confirmation" data-placement="right"

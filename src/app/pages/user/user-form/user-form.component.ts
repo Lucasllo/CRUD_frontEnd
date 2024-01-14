@@ -3,9 +3,6 @@ import { FormGroup } from "@angular/forms";
 import { FormlyFieldConfig, FormlyFormOptions } from "@ngx-formly/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { UserService } from "../user.service";
-import { HttpClient } from "@angular/common/http";
-import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
-import { map, Observable } from "rxjs";
 
 export const GENDERS = [
   { label: "Homem", value: "male" },
@@ -18,10 +15,6 @@ export const GENDERS = [
   styleUrls: ["./user-form.component.scss"],
 })
 export class UserFormComponent {
-  fileInput: File | null = null;
-  fileSelected?: Blob;
-  url: SafeResourceUrl | undefined;
-
   user: any = {};
   model: any = {};
   form = new FormGroup({});
@@ -34,7 +27,7 @@ export class UserFormComponent {
       fieldGroupClassName: "row",
       fieldGroup: [
         {
-          key: "first_name",
+          key: "nome",
           type: "input",
           props: {
             label: "Nome",
@@ -43,7 +36,7 @@ export class UserFormComponent {
           },
         },
         {
-          key: "last_name",
+          key: "sobrenome",
           type: "input",
           props: {
             label: "Sobrenome",
@@ -52,16 +45,16 @@ export class UserFormComponent {
           },
         },
         {
-          key: "email",
+          key: "idade",
           type: "input",
           props: {
-            label: "Email",
-            placeholder: "Email",
+            label: "Idade",
+            placeholder: "Idade",
             required: true,
           },
         },
         {
-          key: "gender",
+          key: "genero",
           type: "select",
           props: {
             label: "Genero",
@@ -77,74 +70,41 @@ export class UserFormComponent {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private userService: UserService,
-    private http: HttpClient,
-    private domSanitizer: DomSanitizer
+    private userService: UserService
   ) {
-    this.route.queryParams.subscribe(async (params: any) => {
+    this.route.queryParams.subscribe(async (params: any): Promise<void> => {
       if (params.id !== undefined && params.id !== null) {
         this.user = await this.userService.get<any>({
-          url: `http://localhost:3000/user/${params.id}`,
+          url: `http://localhost:3000/getUser/${params.id}`,
           params: {},
         });
         this.model = this.user;
-        this.getImage(
-          "http://localhost:3000/userImage/" + this.model.id
-        ).subscribe((x) => (this.url = x));
       } else {
         this.model = {};
       }
     });
   }
 
-  public getImage(url: string): Observable<SafeResourceUrl> {
-    return this.http.get(url, { responseType: "blob" }).pipe(
-      map((x) => {
-        const urlToBlob = window.URL.createObjectURL(x);
-        return this.domSanitizer.bypassSecurityTrustResourceUrl(urlToBlob);
-      })
-    );
-  }
-
-  onSelectNewFile(event: any): void {
-    const target = event.target as HTMLInputElement;
-    this.fileSelected = (target.files as FileList)[0];
-    this.url = this.domSanitizer.bypassSecurityTrustUrl(
-      window.URL.createObjectURL(this.fileSelected)
-    ) as string;
-
-    // atenção no método bypassSecurityTrustHtml estamos usando URL
-  }
-
-  async onSubmit(fileinput: FileList | null): Promise<void> {
-    // atenção o parâmetro precisa ter o null por conta do HTML
-
-    let fileInput = fileinput![0]; // o fileinput é parâmetro do onSubmit e o fileInput é atributo do componente
+  async onSubmit(): Promise<void> {
     let formData = new FormData();
-    formData.append("nome", this.model.first_name);
-    formData.append("sobrenome", this.model.last_name);
-    formData.append("idade", this.model.email);
-    formData.append("genero", this.model.gender);
-    formData.append("file", fileInput);
+    formData.append("nome", this.model.nome);
+    formData.append("sobrenome", this.model.sobrenome);
+    formData.append("idade", this.model.idade);
+    formData.append("genero", this.model.genero);
 
     if (this.form.valid) {
       if (this.model?.id !== undefined && this.model?.id !== null) {
         this.user = await this.userService.put<any>({
           url: `http://localhost:3000/updateUser/${this.model?.id}`,
           params: {},
-          data: formData,
+          data: this.model,
         });
       } else {
         delete this.model?.id;
         await this.userService.post<any>({
           url: `http://localhost:3000/addUser`,
           params: {},
-          data: {
-            nome: this.model.first_name,
-            sobrenome: this.model.last_name,
-            idade: this.model.email,
-            genero: this.model.gender,
-          },
+          data: this.model,
         });
       }
     }

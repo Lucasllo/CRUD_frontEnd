@@ -15,16 +15,17 @@
           <tr>
             <th scope="col">#</th>
             <th scope="col">Nome</th>
-            <th scope="col"># Curso</th>
+            <th scope="col">Curso</th>
+            <th scope="col">Ação</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let teacher of teachers">
             <th scope="row">{{teacher.id}}</th>
-            <td>{{teacher.name}}</td>
-            <td>{{teacher.course_id}}</td>
+            <td>{{teacher.nome}}</td>
+            <td>{{teacher.curso.nome}}</td>
             <td>
-              <a class="btn btn-outline-primary" routerLink="/addTeacher?id={{teacher.id}}">
+              <a class="btn btn-outline-primary" routerLink="/addTeacher" [queryParams]="{id: teacher.id}">
                 <fa-icon [icon]="faPencil"></fa-icon>
               </a>
               <button type="button" class="btn btn-outline-danger" data-toggle="confirmation" data-placement="right"

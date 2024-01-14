@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "lgpd-front": {
+    "CRUD": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/lgpd-front",
+            "outputPath": "dist/CRUD",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -69,10 +69,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "lgpd-front:build:production"
+              "browserTarget": "CRUD:build:production"
             },
             "development": {
-              "browserTarget": "lgpd-front:build:development"
+              "browserTarget": "CRUD:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -80,7 +80,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "lgpd-front:build"
+            "browserTarget": "CRUD:build"
           }
         },
         "test": {

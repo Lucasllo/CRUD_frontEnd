@@ -15,7 +15,7 @@
             <th scope="col">#</th>
             <th scope="col">Nome</th>
             <th scope="col">Sobrenome</th>
-            <th scope="col">Email</th>
+            <th scope="col">Idade</th>
             <th scope="col">Genero</th>
             <th scope="col">Ação</th>
           </tr>
@@ -23,12 +23,12 @@
         <tbody>
           <tr *ngFor="let user of users">
             <th scope="row">{{user.id}}</th>
-            <td>{{user.first_name}}</td>
-            <td>{{user.last_name}}</td>
-            <td>{{user.email}}</td>
-            <td>{{getLabelGender(user.gender)}}</td>
+            <td>{{user.nome}}</td>
+            <td>{{user.sobrenome}}</td>
+            <td>{{user.idade}}</td>
+            <td>{{getLabelGender(user.genero)}}</td>
             <td>
-              <a class="btn btn-outline-primary" routerLink="/addUser?id={{user.id}}">
+              <a class="btn btn-outline-primary" routerLink="/addUser" [queryParams]="{id: user.id}">
                 <fa-icon [icon]="faPencil"></fa-icon>
               </a>
               <button type="button" class="btn btn-outline-danger" data-toggle="confirmation" data-placement="right"
